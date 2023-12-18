@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+from django.utils.translation import gettext_lazy as _
 
 from pathlib import Path
 from os import path
@@ -47,6 +48,10 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
+    'coupons.apps.CouponsConfig',
+    'rosetta',
+    'parler',
+    'localflavor',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +62,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
+LOCALE_PATHS = (
+ path.join(BASE_DIR, 'locale/'),
+)
 
 ROOT_URLCONF = 'myshop.urls'
 
@@ -115,13 +124,31 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+LANGUAGES = (
+ ('en', _('English')),
+ ('es', _('Spanish')),
+)
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_TZ = True
+USE_L10N = True
 
+PARLER_LANGUAGES = {
+ None: (
+ {'code': 'en'},
+ {'code': 'es'},
+ ),
+ 'default': {
+ 'fallback': 'en',
+ 'hide_untranslated': False,
+ }
+}
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
